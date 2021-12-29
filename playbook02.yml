@@ -1,0 +1,25 @@
+---
+- name: playbook02
+  hosts: all
+  become: yes
+
+  tasks:
+  - name: remove httpd
+    package: 
+      name: httpd
+      state: absent
+
+  - name: delete index file
+    file:
+      path: "/var/www/html/index.html"
+      state: absent
+
+  - name: close firewall ports
+    firewalld:
+      port: 80/tcp
+      permanent: true
+      state: disabled
+
+
+
+...

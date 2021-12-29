@@ -1,0 +1,36 @@
+---
+- name: playbook01
+  hosts: all
+
+  tasks:
+  - name: install apache
+    package: name=httpd state=present
+    become: yes
+
+  - name: run service
+    service: name=httpd enabled=true
+    become: true
+
+  - name: create index file
+    copy:
+      dest: "/var/www/html/index.html"
+      content: |
+        Welcome to my web server
+    become: true
+
+  - name: install firewalld
+    yum: name=firewalld state=latest
+    become: yes
+
+  - name: start firewalld service
+    service: name=firewalld enabled=true
+    become: yes
+
+  - name: open port
+    firewalld: 
+      zone: public
+      port: 80/tcp
+      permanent: true
+      state: enabled
+    become: yes
+...
