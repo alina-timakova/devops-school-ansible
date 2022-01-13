@@ -1,0 +1,26 @@
+---
+- name: playbook03
+  hosts: all
+  become: yes
+
+  tasks:
+  - name: add parameter net.ifnames to grub file
+    lineinfile:
+      path: /etc/default/grub
+      state: present
+      backrefs: yes
+      regexp: '^(GRUB_CMDLINE_LINUX=(?!.* net.ifnames)\"[^\"]+)(\".*)'
+      line: '\1 net.ifnames=0\2'
+
+  - name: add parameter biosdevname to grub file
+    lineinfile:
+      path: /etc/default/grub
+      state: present
+      backrefs: yes
+      regexp: '^(GRUB_CMDLINE_LINUX=(?!.* biosdevname)\"[^\"]+)(\".*)'
+      line: '\1 biosdevname=0\2'
+
+  - name: save changes
+    command: grub2-mkconfig -o /boot/grub2/grub.cfg
+
+...
