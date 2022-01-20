@@ -1,0 +1,39 @@
+---
+- name: playbook04
+  hosts: all
+  become: true
+  vars_files:
+    - ./secret.yml
+
+  tasks:
+  - name: create user Alice
+    user:
+      name: alice
+      password: "{{ password1 | password_hash('sha512') }}"
+      comment: alice@example.com
+      create_home: yes
+      update_password: on_create
+      state: present
+
+  - name: create user Bob
+    user:
+      name: bob
+      comment: bob@example.com
+      create_home: yes
+      password: "{{ password2 | password_hash('sha512') }}"
+      update_password: on_create
+      state: present
+
+  - name: create user Carol
+    user:
+      name: carol
+      comment: carol@example.com
+      create_home: yes
+      password: "{{ password3 | password_hash('sha512') }}"
+      update_password: on_create
+      state: present
+
+...
+
+
+ 
